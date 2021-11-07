@@ -82,11 +82,13 @@ def getData(client, mqtttopic,):
         result = client.publish(topic, v)
         # result: [0, 1]
         status = result[0]
+
         if status == 0:
-            print(f"Send topic `{topic}`")
+            if do_raw_log:
+                print(f"Send topic `{topic}`")
         else:
             print(f"Failed to send message to topic {topic} ")
-            
+        
 def connect_mqtt(mqttclientid, mqttBroker, mqttPort ):
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
