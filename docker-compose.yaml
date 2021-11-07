@@ -2,16 +2,14 @@ version: '3.8'
 
 services:
   p1mqtt:
-    image: revenberg/dockerp1mqtt
-    container_name: p1mqtt
+    image: revenberg/solarrs485mqtt
+    container_name: solar2mqtt
     restart: always
     depends_on:
       - mqtt
     restart: always
     links:
       - mqtt
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
 
   mqtt:
     image: "eclipse-mosquitto:latest"
