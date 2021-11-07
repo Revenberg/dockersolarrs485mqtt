@@ -30,6 +30,9 @@ if do_raw_log:
     print("running with debug")
     print(server)
     print(port)
+    print(mqttBroker)
+    print(mqttPort)
+    print(mqtttopic)
 
 def getData(client, mqtttopic,):
     instrument = rs485eth.Instrument(server, port, 1, debug=False) # port name, slave address
