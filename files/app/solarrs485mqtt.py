@@ -10,13 +10,15 @@ import json
 import paho.mqtt.client as mqtt
 import random
 import time
+from datetime import datetime
 
 do_raw_log = os.getenv("LOGGING", "false").lower() == 'true'
 
-server = os.getenv("RS485_ADDRESS", "192.168.2.40")
+server = os.getenv("RS485_ADDRESS", "localhost")
 port = int(os.getenv("RS485_PORT", "8899"))
 
-mqttBroker = os.getenv("MQTT_ADDRESS", "192.168.2.59")
+mqttclientid = f'python-mqtt-{random.randint(0, 1000)}'
+mqttBroker = os.getenv("MQTT_ADDRESS", "localhost")
 mqttPort = int(os.getenv("MQTT_PORT", "1883"))
 mqttTopic = os.getenv("MQTT_TOPIC", "readings/solar")
 
@@ -28,7 +30,7 @@ if do_raw_log:
     print(mqttPort)
     print(mqttTopic)
 
-def getData(client, mqttTopic,):
+def getData(client, mqttTopic):
     instrument = rs485eth.Instrument(server, port, 1, debug=False) # port name, slave address
     
     values = dict()
@@ -68,20 +70,24 @@ def getData(client, mqttTopic,):
       print("Date : {:02d}-{:02d}-20{:02d} {:02d}:{:02d}:{:02d}".format(Realtime_DATA_dd, Realtime_DATA_mm, Realtime_DATA_yy, Realtime_DATA_hh, Realtime_DATA_mi, Realtime_DATA_ss) )
       print( values) 
 
-    for k, v in values._keys.items():
-        topic = mqttTopic + "/" + k
-        
-        print(f"Send topic `{topic}`")
-        print(f"Send topic `{v}`")
-        result = client.publish(topic, v)
-        # result: [0, 1]
-        status = result[0]
+    json_body = { 'reading': [ {k: v for k, v in values._keys.items()} ],
+                      'dateTime': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+                    }
 
-        if status == 0:
-            if do_raw_log:
-                print(f"Send topic `{topic}`")
-        else:
-            print(f"Failed to send message to topic {topic} ")
+    if do_raw_log:
+        print(f"Send topic `{mqttTopic}`")
+        print(f"Send topic `{json_body}`")
+
+    result = client.publish(mqttTopic, json.dumps(json_body))
+    # result: [0, 1]
+    status = result[0]
+
+    if status == 0:
+        if do_raw_log:
+            print(f"Send topic `{mqttTopic}`")
+    else:
+        print(f"Failed to send message to topic {mqttTopic} ")
+        
         
 def connect_mqtt(mqttclientid, mqttBroker, mqttPort ):
     def on_connect(client, userdata, flags, rc):
