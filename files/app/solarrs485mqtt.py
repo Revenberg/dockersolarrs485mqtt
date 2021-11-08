@@ -6,25 +6,19 @@ import os
 import binascii
 import time
 import sys
-import configparser
 import json
 import paho.mqtt.client as mqtt
 import random
 import time
 
-config = configparser.RawConfigParser(allow_no_value=True)
-config.read("config.ini")
+do_raw_log = os.getenv("LOGGING", "false").lower() == 'true'
 
-log_path = config.get('Logging', 'log_path', fallback='/var/log/solar/')
-do_raw_log = config.getboolean('Logging', 'do_raw_log')
+server = os.getenv("RS485_ADDRESS", "192.168.2.40")
+port = int(os.getenv("RS485_PORT", "8899"))
 
-server = config.get('rs485', 'server')
-port = int(config.get('rs485', 'port'))
-
-mqttclientid = f'python-mqtt-{random.randint(0, 1000)}'
-mqttBroker = config.get('mqtt', 'mqttBroker')
-mqttPort = int(config.get('mqtt', 'mqttPort'))
-mqtttopic = config.get('mqtt', 'mqttTopic')
+mqttBroker = os.getenv("MQTT_ADDRESS", "192.168.2.59")
+mqttPort = int(os.getenv("MQTT_PORT", "1883"))
+mqttTopic = os.getenv("MQTT_TOPIC", "readings/solar")
 
 if do_raw_log:
     print("running with debug")
@@ -32,9 +26,9 @@ if do_raw_log:
     print(port)
     print(mqttBroker)
     print(mqttPort)
-    print(mqtttopic)
+    print(mqttTopic)
 
-def getData(client, mqtttopic,):
+def getData(client, mqttTopic,):
     instrument = rs485eth.Instrument(server, port, 1, debug=False) # port name, slave address
     
     values = dict()
@@ -75,7 +69,7 @@ def getData(client, mqtttopic,):
       print( values) 
 
     for k, v in values._keys.items():
-        topic = mqtttopic + "/" + k
+        topic = mqttTopic + "/" + k
         
         print(f"Send topic `{topic}`")
         print(f"Send topic `{v}`")
@@ -107,7 +101,7 @@ client.loop_start()
 
 try:
     while True:
-        getData(client, mqtttopic,)
+        getData(client, mqttTopic,)
         time.sleep(60)
 except Exception as e:
     print(e) 
