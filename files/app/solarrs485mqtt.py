@@ -13,6 +13,8 @@ from datetime import datetime
 
 do_raw_log = os.getenv("LOGGING", "false").lower() == 'true'
 
+pool_frequency = int(os.getenv("POOL_FREQUENCY", "60"))
+
 server = os.getenv("RS485_ADDRESS", "localhost")
 port = int(os.getenv("RS485_PORT", "8899"))
 
@@ -106,8 +108,8 @@ client.loop_start()
 
 try:
     while True:
-        getData(client, mqttTopic,)
-        time.sleep(60)
+        getData(client, mqttTopic)
+        time.sleep(pool_frequency)
 except Exception as e:
     print(e) 
     pass
