@@ -20,7 +20,7 @@ port = int(os.getenv("RS485_PORT", "8899"))
 mqttclientid = f'python-mqtt-{random.randint(0, 1000)}'
 mqttBroker = os.getenv("MQTT_ADDRESS", "localhost")
 mqttPort = int(os.getenv("MQTT_PORT", "1883"))
-mqttTopic = os.getenv("MQTT_TOPIC", "readings/solar")
+mqttTopic = os.getenv("MQTT_TOPIC", "reading/solar")
 
 if do_raw_log:
     print("running with debug")

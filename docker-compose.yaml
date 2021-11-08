@@ -9,7 +9,7 @@ services:
       - RS485_PORT=8899
       - MQTT_ADDRESS=192.168.2.59
       - MQTT_PORT=1883
-      - MQTT_TOPIC=readings/solar
+      - MQTT_TOPIC=reading/solar
     restart: always
     depends_on:
       - mqtt
