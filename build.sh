@@ -2,7 +2,7 @@
 
 # version 2021-08-07 15:20
 
-cd ~/dockersolarrs485logger
+cd ~/dockersolarrs485mqtt
 
 if [ -n "$1" ]; then
   ex=$1
@@ -34,3 +34,4 @@ if [ $ex == true ]; then
 fi
 
 cd -
+

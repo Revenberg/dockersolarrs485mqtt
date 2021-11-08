@@ -8,6 +8,5 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 
 COPY files/app* /app/
-COPY config/* /app/
 
 CMD python ./solarrs485mqtt.py
