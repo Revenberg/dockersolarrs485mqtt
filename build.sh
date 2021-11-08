@@ -27,7 +27,7 @@ if [ $ex == true ]; then
 
     echo "==========================================================="
     echo "=                                                         ="
-    echo "=          docker run revenberg/solarrs485mqtt          ="
+    echo "=          docker run revenberg/solarrs485mqtt            ="
     echo "=                                                         ="
     echo "==========================================================="
     # docker run revenberg/solarrs485mqtt
