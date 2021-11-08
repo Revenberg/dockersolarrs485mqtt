@@ -9,7 +9,6 @@ import sys
 import json
 import paho.mqtt.client as mqtt
 import random
-from datetime import datetime
 
 do_raw_log = os.getenv("LOGGING", "false").lower() == 'true'
 
@@ -71,10 +70,8 @@ def getData(client, mqttTopic):
       print("Date : {:02d}-{:02d}-20{:02d} {:02d}:{:02d}:{:02d}".format(Realtime_DATA_dd, Realtime_DATA_mm, Realtime_DATA_yy, Realtime_DATA_hh, Realtime_DATA_mi, Realtime_DATA_ss) )
       print( values) 
 
-    json_body = { 'reading': [ {k: v for k, v in values.items()} ],
-                      'dateTime': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-                    }
-
+    json_body = { k: v for k, v in values.items() }
+                     
     if do_raw_log:
         print(f"Send topic `{mqttTopic}`")
         print(f"Send topic `{json_body}`")
