@@ -10,6 +10,7 @@ services:
       - MQTT_ADDRESS=192.168.2.59
       - MQTT_PORT=1883
       - MQTT_TOPIC=reading/solar
+      - LOGGING=true
     restart: always
     depends_on:
       - mqtt
