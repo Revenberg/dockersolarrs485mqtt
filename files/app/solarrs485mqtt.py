@@ -34,8 +34,10 @@ def getData(client, mqttTopic):
     instrument = rs485eth.Instrument(server, port, 1, debug=False) # port name, slave address
     
     values = dict()
-    values['Generated (All time)'] = instrument.read_long(3008, functioncode=4, signed=False) # Read All Time Energy (KWH Total) as Unsigned 32-Bit
-    values['Generated (Today)'] = instrument.read_register(3014, numberOfDecimals=0, functioncode=4, signed=False) # Read Today Energy (KWH Total) as 16-Bit
+    values['Generated (All time)'] = instrument.read_long(3008, functioncode=4, signed=False) # Read All Time Energy (KWH Total) as Unsigned 32-Bit   
+    values['Generated (Today)'] = instrument.read_register(3014, numberOfDecimals=1, functioncode=4, signed=False) # Read Today Energy (KWH Total) as 16-Bit
+    values['Generated (Yesterday)'] = instrument.read_register(3015, numberOfDecimals=1, functioncode=4, signed=False) # Read Today Energy (KWH Total) as 16-Bit
+    
     values['AC Watts (W)'] = instrument.read_long(3004, functioncode=4, signed=False) #Read AC Watts as Unsigned 32-Bit
     values['DC Voltage 1 (V)'] = instrument.read_register(3021, functioncode=4, signed=False) / 10 #Read DC Volts as Unsigned 16-Bit
     values['DC Current 1 (A)'] = instrument.read_register(3022, functioncode=4, signed=False) / 10 #Read DC Current as Unsigned 16-Bit
@@ -66,11 +68,14 @@ def getData(client, mqttTopic):
     values['Last month energy (W)'] = instrument.read_register(3013, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
     values['Last year energy'] = instrument.read_register(3019, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
 
+    for x in range(3008, 3099):
+        values[x] = instrument.read_register(x, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
+
     if do_raw_log:
       print("Date : {:02d}-{:02d}-20{:02d} {:02d}:{:02d}:{:02d}".format(Realtime_DATA_dd, Realtime_DATA_mm, Realtime_DATA_yy, Realtime_DATA_hh, Realtime_DATA_mi, Realtime_DATA_ss) )
       print( values) 
 
-    json_body = { k: v for k, v in values.items() }
+    json_body = { k: v for k, v in values.items().replace("(", "").replace(")", "")  }
                      
     if do_raw_log:
         print(f"Send topic `{mqttTopic}`")
