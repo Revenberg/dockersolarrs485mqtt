@@ -7,6 +7,7 @@ import binascii
 import time
 import sys
 import json
+import random
 import paho.mqtt.client as mqtt
 
 do_raw_log = os.getenv("LOGGING", "false").lower() == 'true'
