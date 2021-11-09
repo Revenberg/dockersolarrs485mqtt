@@ -35,8 +35,8 @@ def getData(client, mqttTopic):
     
     values = dict()
     values['Generated (All time)'] = instrument.read_long(3008, functioncode=4, signed=False) # Read All Time Energy (KWH Total) as Unsigned 32-Bit   
-    values['Generated (Today)'] = instrument.read_register(3014, numberOfDecimals=1, functioncode=4, signed=False) # Read Today Energy (KWH Total) as 16-Bit
-    values['Generated (Yesterday)'] = instrument.read_register(3015, numberOfDecimals=1, functioncode=4, signed=False) # Read Today Energy (KWH Total) as 16-Bit
+    values['Generated (Today)'] = instrument.read_register(3014, numberOfDecimals=1, functioncode=4, signed=False)/10 # Read Today Energy (KWH Total) as 16-Bit
+    values['Generated (Yesterday)'] = instrument.read_register(3015, numberOfDecimals=1, functioncode=4, signed=False)/10 # Read Today Energy (KWH Total) as 16-Bit
     
     values['AC Watts (W)'] = instrument.read_long(3004, functioncode=4, signed=False) #Read AC Watts as Unsigned 32-Bit
     values['DC Voltage 1 (V)'] = instrument.read_register(3021, functioncode=4, signed=False) / 10 #Read DC Volts as Unsigned 16-Bit
@@ -66,9 +66,12 @@ def getData(client, mqttTopic):
     values['Total energy (W)'] = instrument.read_register(3009, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
     values['Month energy (W)'] = instrument.read_register(3011, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
     values['Last month energy (W)'] = instrument.read_register(3013, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
+    values['Year energy'] = instrument.read_register(3017, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
     values['Last year energy'] = instrument.read_register(3019, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
 
-    for x in range(3008, 3099):
+    values['error'] = instrument.read_register(3043, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
+
+    for x in range(2999, 3099):
         values["_" + str(x) + "_" ] = instrument.read_register(x, functioncode=4, signed=False) #Read AC Frequency as Unsigned 16-Bit
 
     if do_raw_log:
