@@ -31,12 +31,9 @@ if do_raw_log:
     print(mqttTopic)
 
 def getData(client, mqttTopic):
-    instrument = rs485eth.Instrument(server, port, 1, debug=False) # port name, slave address
+    instrument = rs485eth.Instrument(server, port, 1, debug=do_raw_log) # port name, slave address
     
     values = dict()
-    print( "01" ) 
-    print( instrument.read_register(3008, functioncode=4, signed=False) ) 
-    print( instrument.read_long(3008, functioncode=4, signed=False) ) 
     print( "01a" ) 
     #values['Generated (All time)'] = instrument.read_long(3008, functioncode=4, signed=False) # Read All Time Energy (KWH Total) as Unsigned 32-Bit   
     print( "01b" ) 
