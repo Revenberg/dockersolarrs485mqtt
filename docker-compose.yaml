@@ -13,14 +13,14 @@ services:
       - LOGGING=true
     restart: always
     depends_on:
-      - mqtt
+      - solarmqtt
     restart: always
     links:
-      - mqtt
+      - solarmqtt
 
-  mqtt:
+  solarmqtt:
     image: "eclipse-mosquitto:latest"
-    container_name: mqtt
+    container_name: solarmqtt
     environment:
       - TZ=Europe/Amsterdam
       - "MQTT_BROKER_URL=mqtt://127.0.0.1"
