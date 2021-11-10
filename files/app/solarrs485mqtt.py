@@ -96,11 +96,16 @@ def getData(client, mqttTopic):
         
         
 def connect_mqtt(mqttclientid, mqttBroker, mqttPort ):
+    if do_raw_log:
+        print(f"mqttclientid: {mqttclientid}")
+        print(f"mqttBroker: {mqttBroker}")
+        print(f"mqttPort: {mqttPort}")
+
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
         else:
-            print("Failed to connect, return code %d\n", rc)
+            print("Failed to connect, return code %d\n", rc)            
     # Set Connecting Client ID
     client = mqtt.Client(mqttclientid)
 #    client.username_pw_set(username, password)
