@@ -34,11 +34,14 @@ def getData(client, mqttTopic):
     instrument = rs485eth.Instrument(server, port, 1, debug=False) # port name, slave address
     
     values = dict()
-    print( "01" ) 
+    print( "01a" ) 
     values['Generated (All time)'] = instrument.read_long(3008, functioncode=4, signed=False) # Read All Time Energy (KWH Total) as Unsigned 32-Bit   
+    print( "01b" ) 
     values['Generated (Today)'] = instrument.read_register(3014, numberOfDecimals=1, functioncode=4, signed=False)/10 # Read Today Energy (KWH Total) as 16-Bit
+    print( "01c" ) 
     values['Generated (Yesterday)'] = instrument.read_register(3015, numberOfDecimals=1, functioncode=4, signed=False)/10 # Read Today Energy (KWH Total) as 16-Bit
-
+    print( "01d" ) 
+    
     print( "02" ) 
     values['AC Watts (W)'] = instrument.read_long(3004, functioncode=4, signed=False) #Read AC Watts as Unsigned 32-Bit
     values['DC Voltage 1 (V)'] = instrument.read_register(3021, functioncode=4, signed=False) / 10 #Read DC Volts as Unsigned 16-Bit
