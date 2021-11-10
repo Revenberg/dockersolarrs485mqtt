@@ -35,7 +35,6 @@ def getData(client, mqttTopic):
     
     values = dict()
     print( "01" ) 
-    print( instrument.read_register(3008, functioncode=132, signed=False) ) 
     print( instrument.read_register(3008, functioncode=4, signed=False) ) 
     print( instrument.read_long(3008, functioncode=4, signed=False) ) 
     print( "01a" ) 
