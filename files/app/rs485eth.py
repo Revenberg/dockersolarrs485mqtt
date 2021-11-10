@@ -16,7 +16,6 @@
 #
 """MinimalModbus: A Python driver for Modbus RTU/ASCII via ETH."""
 
-__author__ = "Sander Revenberg"
 __license__ = "Apache License, Version 2.0"
 __status__ = "Production"
 __version__ = "1.0.0"
