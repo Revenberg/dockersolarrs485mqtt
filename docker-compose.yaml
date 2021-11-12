@@ -7,7 +7,7 @@ services:
     environment:
       - RS485_ADDRESS=192.168.2.40
       - RS485_PORT=8899
-      - MQTT_ADDRESS=192.168.2.59
+      - MQTT_ADDRESS=192.168.2.80
       - MQTT_PORT=1883
       - MQTT_TOPIC=reading/solar
       - LOGGING=true
