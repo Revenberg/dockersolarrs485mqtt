@@ -31,6 +31,8 @@ if do_raw_log:
     print(mqttTopic)
 
 def getData(client, mqttTopic):
+    if do_raw_log:
+       print("call instrument")
     instrument = rs485eth.Instrument(server, port, 1, debug=do_raw_log) # port name, slave address
     
     values = dict()

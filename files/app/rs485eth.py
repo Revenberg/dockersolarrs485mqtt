@@ -239,7 +239,7 @@ class Instrument:
                     payloadformat=_PAYLOADFORMAT_BIT,
                 )
                 retry = 0
-            except Exception:            
+            except Exception:
                 retry = retry - 1
 
         return rc
@@ -1268,8 +1268,7 @@ class Instrument:
                 request, encoding="latin1"
             )  # Convert types to make it Python3 compatible
 
-
-        elif self.debug:
+        else:
             template = (
                 "No sleep required before write. "
                 + "Time since previous read: {:.2f} ms, minimum silent period: {:.2f} ms."
@@ -1282,18 +1281,18 @@ class Instrument:
         # Write request
         latest_write_time = _now()
 #        self.serial.write(request)
-        
+
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ## Connect to an IP with Port, could be a URL
-        sock.connect((self.eth_address, self.eth_port))       
+        sock.connect((self.eth_address, self.eth_port))
 
         sock.send(request)
 ## Send some data, this method can be called multiple times
-        
-        answer = sock.recv(1024)        
+
+        answer = sock.recv(1024)
 ## Close the socket connection, no more data transmission
         sock.close()
-        
+
         # Read and discard local echo
 #        if self.handle_local_echo:
 #            local_echo_to_discard = self.serial.read(len(request))
@@ -1346,6 +1345,7 @@ class Instrument:
         if not answer:
             raise NoResponseError("No communication with the instrument (no answer)")
 
+        self._print_debug(answer)
         return answer
 
     # For backward compatibility
@@ -1618,7 +1618,7 @@ def _extract_payload(response, slaveaddress, mode, functioncode):
     _check_slaveaddress(slaveaddress)
     _check_mode(mode)
     _check_functioncode(functioncode, None)
-    
+
     plainresponse = response
 
     # Validate response length
@@ -3285,7 +3285,7 @@ def _check_response_payload(
         _check_response_number_of_registers(payload, number_of_bits)
 
     elif functioncode == 16:
-        _check_response_number_of_registers(payload, number_of_registers)    
+        _check_response_number_of_registers(payload, number_of_registers)
     # Response for read bits
     if functioncode in [1, 2]:
         registerdata = payload[_NUMBER_OF_BYTES_BEFORE_REGISTERDATA:]
@@ -3377,7 +3377,7 @@ def _check_response_bytecount(payload):
     """
     POSITION_FOR_GIVEN_NUMBER = 0
     NUMBER_OF_BYTES_TO_SKIP = 1
-    
+
     _check_string(
         payload, minlength=1, description="payload", exception_type=InvalidResponseError
     )

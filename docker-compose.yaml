@@ -14,7 +14,6 @@ services:
     restart: always
     depends_on:
       - solarmqtt
-    restart: always
     links:
       - solarmqtt
 
